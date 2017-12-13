@@ -31,7 +31,7 @@ clean:
 #%: %.o CQ.o CQmain.o Makefile
 #	@echo '$(CC)  $(CFLAGS) $< CQ.o CQmain.o $(LFLAGS)  -o $@'
 #	@$(CC) $(CFLAGS) $< CQ.o CQmain.o $(LFLAGS) -o $@
-%: %.c CQ.h Makefile
+%: %.c CQ.h Makefile CQ.o CQmain.o
 	@echo '$(CC) $(CFLAGS) $< CQ.o CQmain.o $(LFLAGS) -o $@'
 	@$(CC) $(CFLAGS)  $< CQ.o CQmain.o $(LFLAGS) -o $@
 
@@ -65,7 +65,7 @@ CQmutex4.o: CQmutex4.c CQ.h Makefile
 	@$(CC)  $(CFLAGS) -DMUTEX -c $< -o $@
 
 # primes_trivial.o: primes_trivial.c CQ.h
-# CQmain.o: CQmain.c CQ.h Makefile
-# CQtest.o: CQtest.c CQ.h Makefile
-# CQ.o: CQ.c CQ.h Makefile
+CQmain.o: CQmain.c CQ.h Makefile
+CQtest.o: CQtest.c CQ.h Makefile
+CQ.o: CQ.c CQ.h Makefile
 
