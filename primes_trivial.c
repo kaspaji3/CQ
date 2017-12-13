@@ -54,15 +54,15 @@ void reader (CQhandle *input) {
   unsigned int *pp;
 
   queue = input->q;
-  if (!queue->isEmpty(input)) {
-    buffer = queue->getMsg(input);
-//  while (buffer = queue->getMsgNW(input)) {
-    if (buffer) {
+//  if (!queue->isEmpty(input)) {
+//    buffer = queue->getMsg(input);
+  if (buffer = queue->getMsgNW(input)) {
+//    if (buffer) {
       pp = (unsigned int *) buffer;
       primes[known_primes++] = *pp;
       fprintf (f,"%d\n", *pp);
       queue->putBuffer(input, buffer);
-    }
+//    }
   }
 }
 
@@ -97,9 +97,9 @@ void generator (CQhandle *input, char *buffer, CQhandle *output) {
     }
     reader(input);	// read new primes from the last seive
     if (known_primes > required) { 	// at least one new primer was read since last round
-      required++; // need to check one more prime - move fence up
+      local_max = primes[required]*primes[required]; // the next local limit to generate
+      required++; // move fence up one more prime to check
       required_primes = required;
-      local_max = primes[required-1]*primes[required-1];	// the next local limit to generate
     }
   }
   queue->close(output);
@@ -124,6 +124,7 @@ int a=1;
   primes[0]=2;
   f = fopen("primes.txt","w");
   fprintf (f,"%d\n", 2);
+  for (int i = 0; i < num_threads -1; i++) cq_workers[i] = &worker;
 }
 
 

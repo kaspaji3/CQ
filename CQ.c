@@ -285,23 +285,23 @@ char *Wn_getBuffer (CQhandle *h) { // doda volny buffer pro zapis zpravy
   CQ *q;
   CQentry *e;
   char *b;
-  long old, new, index;
+  long oldalloc, newalloc, index;
   long success;
 
   q = h->q;
   //    Dprintf("W%ld:getBuffer %s\n"," ")
   do {
-    while ((old = q->allocated) - q->deallocated == q->queuesize) {
+    while ((oldalloc = q->allocated) - q->deallocated == q->queuesize) {
       // ~delsi cekani - na precteni zpravy ctenarem
       if (cq_opt & OPT_WSTFW) q->busywriter (h);
     }
-    index = old & q->mask;
+    index = oldalloc & q->mask;
     e = q->queue + index;
     b = e->buffer;
-    new = old + 1;
-    success = __sync_bool_compare_and_swap (&q->allocated, old, new);
+    newalloc = oldalloc + 1;
+    success = __sync_bool_compare_and_swap (&q->allocated, oldalloc, newalloc);
   } while (!success);
-  //    Fprintf("W%ld:getBuffer old=%ld new=%ld success= %ld\n", old, new, success)
+  //    Fprintf("W%ld:getBuffer old=%ld new=%ld success= %ld\n", oldalloc, newalloc, success)
   //    Fprintf("W%ld:getBuffer %ld %ld: %p\n", q->mask, index, b)
   return b;
 }

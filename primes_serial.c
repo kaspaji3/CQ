@@ -14,6 +14,11 @@
 #include <string.h>
 #include <math.h>
 
+#define SHARED volatile
+#define ALIGNED __attribute__ ((aligned (64)))
+
+#include "CQ.h"
+
 unsigned int *primes;
 unsigned int max_prime;
 unsigned int max_prime_sqrt;
@@ -24,10 +29,6 @@ FILE *f;
 void appl_help () {
   printf("prime MAX \n");
 }
-//void appl_run (int thread, int stage, int index, CQhandle *input, CQhandle *output) {
-//}
-//void appl_stat () {
-//}
 
 void appl_init(int argc, char **argv) {
 int a=1;
@@ -43,6 +44,8 @@ int a=1;
   primes[0]=2;
   f = fopen("primes.txt","w");
   fprintf (f,"%d\n", 2);
+}
+void appl_run (int thread, int stage, int index, CQhandle *input, CQhandle *output) {
   while (p < max_prime) {
     for (int i=0; i<num; i++) {
       if (p % primes[i] == 0) break;
@@ -59,6 +62,9 @@ int a=1;
   free(primes);
 }
 
-int main(int argc, char **argv) {
-  appl_init(argc, argv);
+void appl_stat () {
 }
+
+//int main(int argc, char **argv) {
+//  appl_init(argc, argv);
+//}
